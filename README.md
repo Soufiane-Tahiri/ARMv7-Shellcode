@@ -10,10 +10,12 @@ This project demonstrates the creation of a position-independent ARMv7 shellcode
 
 ### Key Constraints & Solutions
 * **Null-Byte Avoidance:** Standard ARM instructions (32-bit) often contain `0x00` bytes. This project switches the processor state to **Thumb Mode** (16-bit) using a `BX` instruction to an odd address, allowing for denser instructions that avoid nulls.
-* **Stack-Based String Construction:** Instead of storing the payload string (`//bin/sh`) in a data section (which relies on absolute addressing), the string is constructed dynamically on the stack at runtime using immediate values and bitwise shifts (`LSL`). This makes the shellcode **Position Independent Code (PIC)**.
-* **Endianness:** The string is pushed in reverse order (Little Endian) to ensure it lays out correctly in memory:
-    1.  `sh` (Padded with nulls/alignment)
-    2.  `//bi`
+* **Stack-Based String Construction:** Instead of storing the payload string (`//bin/sh`) in a data section, the string is constructed dynamically on the stack.
+* **8-Byte Alignment Trick:** We use the string `//bin/sh` (8 bytes) instead of `/bin/sh` (7 bytes). This allows us to push two perfect 4-byte words without needing to handle null-byte padding.
+* **Endianness & Stack Order:** The string is pushed in reverse order because the stack grows downward (High Memory -> Low Memory), but strings are read upwards (Low -> High):
+    1.  **Push 1 (High Mem):** `n/sh` (`0x6e2f7368`) - The end of the string.
+    2.  **Push 2 (Low Mem):** `//bi` (`0x2f2f6269`) - The start of the string.
+    * *Result in Memory:* `//bin/sh`
 
 ### Register Map
 * **R0:** Pointer to the filename (`//bin/sh`) on the stack.
