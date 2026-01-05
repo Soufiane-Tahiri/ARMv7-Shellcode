@@ -1,0 +1,7 @@
+*.o
+
+shellcode
+loader
+test_shellcode
+
+.vscode/
