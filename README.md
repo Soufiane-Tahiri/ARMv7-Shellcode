@@ -62,8 +62,7 @@ This code is for educational and research purposes only. It is intended to demon
 
 ### 1. Memory Visualization (GDB)
 *Verifying stack alignment and register states before syscall execution.*
-![GDB Debugging](img/gdb_debug.png)
-
+![Shell Execution](img/execution_proof.png)
 ### 2. Successful Execution
 *Running the shellcode in QEMU and popping a shell.*
-![Shell Execution](img/execution_proof.png)
+![GDB Debugging](img/gdb_debug.png)
